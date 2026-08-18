@@ -273,9 +273,31 @@ export default function exploreReducer(
     },
     [actions.SYNC_DATASOURCE_METADATA]() {
       const typedAction = action as SyncDatasourceMetadataAction;
+      const currentDatasource = state.datasource;
+      const newDatasource = typedAction.datasource;
+
       return {
         ...state,
-        datasource: typedAction.datasource,
+        datasource: {
+          ...currentDatasource,
+          ...newDatasource,
+          columns:
+            newDatasource?.columns && newDatasource.columns.length > 0
+              ? newDatasource.columns
+              : currentDatasource?.columns,
+          metrics:
+            newDatasource?.metrics && newDatasource.metrics.length > 0
+              ? newDatasource.metrics
+              : currentDatasource?.metrics,
+          certified_by:
+            newDatasource?.certified_by ?? currentDatasource?.certified_by,
+          certification_details:
+            newDatasource?.certification_details ??
+            currentDatasource?.certification_details,
+          warning_markdown:
+            newDatasource?.warning_markdown ??
+            currentDatasource?.warning_markdown,
+        } as Dataset,
       };
     },
     [actions.UPDATE_FORM_DATA_BY_DATASOURCE]() {
