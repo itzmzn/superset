@@ -292,6 +292,32 @@ export function syncDatasourceMetadata(datasource: Dataset) {
   return { type: SYNC_DATASOURCE_METADATA, datasource };
 }
 
+export function fetchDatasourceMetadata(
+  datasourceKey: string,
+  onDatasourceSave?: (datasource: Dataset) => void,
+) {
+  return function (dispatch: Dispatch) {
+    dispatch(startMetaDataLoading());
+    const endpoint = `/api/v1/dataset/${datasourceKey}`;
+    return SupersetClient.get({ endpoint })
+      .then(({ json }) => {
+        const datasource = json.result as Dataset;
+        dispatch(syncDatasourceMetadata(datasource));
+        if (onDatasourceSave) {
+          onDatasourceSave(datasource);
+        }
+      })
+      .catch(() => {
+        dispatch(
+          addDangerToast(t('An error occurred while fetching dataset metadata')),
+        );
+      })
+      .finally(() => {
+        dispatch(stopMetaDataLoading());
+      });
+  };
+}
+
 export const exploreActions = {
   ...toastActions,
   fetchDatasourcesStarted,
@@ -307,6 +333,7 @@ export const exploreActions = {
   sliceUpdated,
   setForceQuery,
   syncDatasourceMetadata,
+  fetchDatasourceMetadata,
   fetchCompatibility,
 };
 
