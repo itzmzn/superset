@@ -1341,7 +1341,7 @@ test('only-total labels are unaffected by the zero-height guard', () => {
 describe('annotation rendering order', () => {
   test('formula annotations render below data series', () => {
     const annotation = transformFormulaAnnotation(
-      { name: 'Threshold', formula: '1' } as Parameters<
+      { name: 'Threshold', value: '1' } as Parameters<
         typeof transformFormulaAnnotation
       >[0],
       [],
@@ -1358,7 +1358,7 @@ describe('annotation rendering order', () => {
         typeof transformEventAnnotation
       >[0],
       [],
-      { Event: [{ time: '2026-10-25', title: 'Event' }] } as Parameters<
+      { Event: { records: [{ start_dttm: '2026-10-25', short_descr: 'Event' }] } } as Parameters<
         typeof transformEventAnnotation
       >[2],
       mockColorScale,
