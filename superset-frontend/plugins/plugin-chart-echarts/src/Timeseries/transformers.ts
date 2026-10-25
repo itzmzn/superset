@@ -760,7 +760,7 @@ export function transformFormulaAnnotation(
   return {
     name,
     id: name,
-    z: 10,
+    z: 0,
     itemStyle: {
       color: color || colorScale(name, sliceId),
     },
